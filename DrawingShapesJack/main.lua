@@ -17,3 +17,4 @@ display.setDefault("background", 202/255, 0/255, 188/255)
 
 display.newPolygon(100, 100, verticesTriangle)
 
+myTriangle:setFillColor(120/255, 141/255, 185/255)
