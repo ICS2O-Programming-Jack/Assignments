@@ -12,7 +12,7 @@ display.setDefault("background", 0, 1, .5)
 -----------------------------------------------------------------------------------------
 local totalSeconds = 5
 local secondsLeft = 5
-local clockText
+local clockText 
 local countDownTimer 
 local heart3
 local lives = 3
@@ -29,9 +29,9 @@ local correctAnswer
 local incorrectObject
 local gameOver
 
-local gameOverSound = audio.loadSound("Sounds/gameOver.mp3")
+local gameOverSound = audio.loadSound("Sounds/GameOver.mp3")
 local gameOverSoundChannel
-gameOverSoundChannel = audio.play(gameOverSound)
+--gameOverSoundChannel = audio.play(gameOverSound) **add later
 -----------------------------------------------------------------------------------------
 --LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -131,7 +131,6 @@ pointsText = display.newText("Numbers correct = " .. points, display.contentWidt
 
 	--update it in the display object 
 	pointsText.text = "Numbers correct = " .. points 
-
 questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 75 )
 questionObject:setTextColor(1 , 1, 1)
 questionObject.isVisible = true
@@ -166,8 +165,9 @@ gameOver = display.newImageRect("Images/Game Over.jpg", 1024, 769)
 gameOver.x = display.contentWidth/2 
 gameOver.y = display.contentHeight/2
 gameOver.isVisible = false
-
- 
+--update it in the display object 
+--clockText.text = "Time: " .. countDownTimer
+ clockText = display.newText("Time: " .. secondsLeft, display.contentHeight/8, 25, nil, 50)
 ----------------------------------------------------------------------------------------------------------------
 --FUNCTION CALLS
 ----------------------------------------------------------------------------------------------------------------
