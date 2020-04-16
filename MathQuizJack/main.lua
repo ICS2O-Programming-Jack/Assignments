@@ -10,8 +10,8 @@ display.setDefault("background", 0, 1, .5)
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
-local totalSeconds = 5
-local secondsLeft = 5
+local totalSeconds = 11
+local secondsLeft = 11
 local clockText 
 local countDownTimer 
 local heart3
@@ -28,10 +28,28 @@ local userAnswer
 local correctAnswer
 local incorrectObject
 local gameOver
+local addrandomNumber1
+local addrandomNumber2
+local multiplyrandomNumber1
+local multiplyrandomNumber2
+local devisionrandomNumber1
+local devisionrandomNumber2
+
 
 local gameOverSound = audio.loadSound("Sounds/GameOver.mp3")
 local gameOverSoundChannel
---gameOverSoundChannel = audio.play(gameOverSound) **add later
+
+local WinSound = audio.loadSound("Sounds/WinSound.mp3")
+local WinSoundChannel
+--WinSoundChannel = audio.play(WinSound)
+
+local correctSound = audio.loadSound("Sounds/correctSound.mp3")
+local correctSoundChannel
+--correctSoundChannel = audio.play(correctSound)
+
+local wrongSound = audio.loadSound("Sounds/wrongSound.mp3")
+local wrongSoundChannel
+--wrongSoundChannel = audio.play(wrongSound)
 -----------------------------------------------------------------------------------------
 --LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -41,43 +59,55 @@ local function UpdateTime()
 	secondsLeft = secondsLeft - 1
 
 	--display the number of seconds left in the clock object 
-    clockText.text = totalSeconds .. ""
- end
+    clockText.text = secondsLeft .. ""
 
     if (secondsLeft == 0) then
     	--reset the seconds 
     	secondsLeft = totalSeconds
     	lives = lives - 1
     	if (lives == 2) then
-    		heart2.isVisible = false
+    		heart3.isVisible = false
+    		wrongSoundChannel = audio.play(wrongSound)
     	elseif (lives == 1) then
+    		heart2.isVisible = false
+    		wrongSoundChannel = audio.play(wrongSound)
+    	elseif (lives == 0) then
     		heart1.isVisible = false
-   	   end
+    		gameOver.isVisible = true
+    		gameOverSoundChannel = audio.play(gameOverSound)
+    		clockText.isVisible = false
+    		numericField.isVisible = false
+end   	   end
 end
  local function AskQuestion()
 	-- generate 2 random nembers for division from 1 to 100
 	--
+	addrandomNumber2 = math.random(1,20)
+	addrandomNumber1 = math.random(1,20)
+	multiplyrandomNumber1 = math.random(1,10)
+	multiplyrandomNumber2 = math.random(1,10)
+	devisionrandomNumber1 = math.random(1,100)
+	devisionrandomNumber2 = math.random(1,100)
 	randomNumber1 = math.random(0, 4)
 	randomNumber2 = math.random(0, 4)
     randomOperator = math.random(1, 4)
 	
     if (randomOperator == 1) then
     	--calculate the answer 
-     correctAnswer = randomNumber1 + randomNumber2
+     correctAnswer = addrandomNumber1 + addrandomNumber2
 	    --create question in text Object
-	 questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
+	 questionObject.text = addrandomNumber1 .. " + " .. addrandomNumber2 .. " = "
     elseif (randomOperator == 2) then 
-    	correctAnswer = randomNumber1 - randomNumber2
+    	correctAnswer = addrandomNumber1 - addrandomNumber2
 	    --create question in text Object
-	 questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
+	 questionObject.text = addrandomNumber1 .. " - " .. addrandomNumber2 .. " = "
     elseif (randomOperator == 3) then
      	correctAnswer = randomNumber1 * randomNumber2
 	    --create question in text Object
-	 questionObject.text = randomNumber1 .. " * " .. randomNumber2 .. " = "
-    else correctAnswer = randomNumber1 / randomNumber2
+	 questionObject.text = multiplyrandomNumber1 .. " * " .. multiplyrandomNumber2 .. " = "
+    else correctAnswer = devisionrandomNumber1 / devisionrandomNumber2
 	    --create question in text Object
-	 questionObject.text = randomNumber1 .. " ÷ " .. randomNumber2 .. " = "
-    correctAnswer = randomNumber1 / randomNumber2
+    correctAnswer = devisionrandomNumber1 / devisionrandomNumber2
     correctAnswer = correctAnswer * 10
     correctAnswer = math.round(correctAnswer)
     correctAnswer = correctAnswer / 10 
@@ -107,6 +137,7 @@ local function NumericFieldListener( event )
 			incorrectObject.isVisible = false
 			timer.performWithDelay(3020, HideCorrect)
 			points = points + 1 
+			correctSoundChannel = audio.play(correctSound)
 			--update it in the display object 
 			pointsText.text = "Numbers correct = " .. points 
 		else incorrectObject.isVisible = true 
