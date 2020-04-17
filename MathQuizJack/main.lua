@@ -15,7 +15,7 @@ local secondsLeft = 11
 local clockText 
 local countDownTimer 
 local heart3
-local lives = 3
+local lives = 4
 local heart1
 local heart2
 local questionObject
@@ -34,8 +34,8 @@ local multiplyrandomNumber1
 local multiplyrandomNumber2
 local devisionrandomNumber1
 local devisionrandomNumber2
-
-
+local YouWin
+local heart4
 local gameOverSound = audio.loadSound("Sounds/GameOver.mp3")
 local gameOverSoundChannel
 
@@ -60,12 +60,15 @@ local function UpdateTime()
 
 	--display the number of seconds left in the clock object 
     clockText.text = secondsLeft .. ""
-
+    
     if (secondsLeft == 0) then
     	--reset the seconds 
     	secondsLeft = totalSeconds
     	lives = lives - 1
-    	if (lives == 2) then
+    	if (lives == 3) then
+    		heart4.isVisible = false
+    		wrongSoundChannel = audio.play(wrongSound)
+    	elseif (lives == 2) then
     		heart3.isVisible = false
     		wrongSoundChannel = audio.play(wrongSound)
     	elseif (lives == 1) then
@@ -77,7 +80,7 @@ local function UpdateTime()
     		gameOverSoundChannel = audio.play(gameOverSound)
     		clockText.isVisible = false
     		numericField.isVisible = false
-end   	   end
+  end   end
 end
  local function AskQuestion()
 	-- generate 2 random nembers for division from 1 to 100
@@ -98,15 +101,19 @@ end
 	    --create question in text Object
 	 questionObject.text = addrandomNumber1 .. " + " .. addrandomNumber2 .. " = "
     elseif (randomOperator == 2) then 
-    	correctAnswer = addrandomNumber1 - addrandomNumber2
+    	if (addrandomNumber1 - addrandomNumber2 < 0) then
+    		questionObject.text = addrandomNumber2 .. " - " .. addrandomNumber1 .. " = "
+    	else
 	    --create question in text Object
-	 questionObject.text = addrandomNumber1 .. " - " .. addrandomNumber2 .. " = "
+	  questionObject.text = addrandomNumber1 .. " - " .. addrandomNumber2 .. " = "
+	   end
     elseif (randomOperator == 3) then
-     	correctAnswer = randomNumber1 * randomNumber2
+     	correctAnswer = multiplyrandomNumber1 * multiplyrandomNumber2
 	    --create question in text Object
 	 questionObject.text = multiplyrandomNumber1 .. " * " .. multiplyrandomNumber2 .. " = "
     else correctAnswer = devisionrandomNumber1 / devisionrandomNumber2
 	    --create question in text Object
+	     questionObject.text = devisionrandomNumber1 .. " / " .. devisionrandomNumber2 .. " = "
     correctAnswer = devisionrandomNumber1 / devisionrandomNumber2
     correctAnswer = correctAnswer * 10
     correctAnswer = math.round(correctAnswer)
@@ -137,14 +144,15 @@ local function NumericFieldListener( event )
 			incorrectObject.isVisible = false
 			timer.performWithDelay(3020, HideCorrect)
 			points = points + 1 
+			secondsLeft = totalSeconds
 			correctSoundChannel = audio.play(correctSound)
 			--update it in the display object 
 			pointsText.text = "Numbers correct = " .. points 
 		else incorrectObject.isVisible = true 
+			secondsLeft = totalSeconds
 			correctObject.isVisible = false
 			timer.performWithDelay(3020, HideIncorrect)
 		end
-
 	end
 end
 
@@ -191,6 +199,16 @@ heart2.y = display.contentHeight * 1 / 7
 heart3 = display.newImageRect("Images/heart.png" , 100, 100)
 heart3.x = display.contentWidth * 5 / 8
 heart3.y = display.contentHeight * 1 / 7
+
+heart4 = display.newImageRect("Images/heart.png" , 100, 100)
+heart4.x = display.contentWidth * 1 / 2
+heart4.y = display.contentHeight * 1 / 7
+
+YouWin = display.newImageRect("Images/YouWin.png", 1024, 769)
+YouWin.x = display.contentWidth/2 
+YouWin.y = display.contentHeight/2
+YouWin.isVisible = false
+
 
 gameOver = display.newImageRect("Images/Game Over.jpg", 1024, 769)
 gameOver.x = display.contentWidth/2 
