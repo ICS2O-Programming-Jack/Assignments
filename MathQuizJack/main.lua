@@ -156,7 +156,7 @@ local function NumericFieldListener( event )
 		if (userAnswer == correctAnswer) then
 			correctObject.isVisible = true
 			incorrectObject.isVisible = false
-			timer.performWithDelay(3020, HideCorrect)
+			timer.performWithDelay(2020, HideCorrect)
 			points = points + 1 
 			if (points == 5) then 
 			YouWin.isVisible = true
@@ -175,7 +175,7 @@ local function NumericFieldListener( event )
 		else incorrectObject.isVisible = true 
 			secondsLeft = totalSeconds
 			correctObject.isVisible = false 
-			timer.performWithDelay(3020, HideIncorrect)
+			timer.performWithDelay(2020, HideIncorrect)
 		end
 	end
 end
