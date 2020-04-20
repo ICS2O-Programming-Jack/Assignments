@@ -35,9 +35,11 @@ local multiplyrandomNumber2
 local devisionrandomNumber1
 local devisionrandomNumber2
 local YouWin
+local hamster
 local heart4
 local gameOverSound = audio.loadSound("Sounds/GameOver.mp3")
 local gameOverSoundChannel
+scrollspeed = 0
 
 local WinSound = audio.loadSound("Sounds/WinSound.mp3")
 local WinSoundChannel
@@ -74,7 +76,11 @@ local function updateLives()
     		
   end 
 end
-
+local function MoveHamster(event)
+--add scroll speed to the y value of the hamster
+hamster.y = hamster.y + scrollspeed
+end 
+Runtime:addEventListener("enterFrame", MoveHamster)
 local function UpdateTime()
 
 	--decrease the number of seconds
@@ -136,6 +142,7 @@ local function HideCorrect()
 	AskQuestion()
 end
 
+ 
 local function NumericFieldListener( event )
 	-- user begins editing "numericFeild"
 	if ( event.phase == "began" ) then
@@ -153,8 +160,14 @@ local function NumericFieldListener( event )
 			points = points + 1 
 			if (points == 5) then 
 			YouWin.isVisible = true
+			MoveHamster()
+			hamster.y = hamster.y 
+			hamster.isVisible = true
+			scrollspeed = 3
+			gameOver.isVisible = false 
             WinSoundChannel = audio.play(WinSound)
 		    end
+
 			secondsLeft = totalSeconds
 			correctSoundChannel = audio.play(correctSound)
 			--update it in the display object 
@@ -220,6 +233,11 @@ YouWin.x = display.contentWidth/2
 YouWin.y = display.contentHeight/2
 YouWin.isVisible = false
 --WinSoundChannel = audio.play(WinSound)
+hamster = display.newImageRect("Images/hamster.png", 250, 250 )
+ hamster.y = 100
+ hamster.x = display.contentWidth/2
+ hamster.isVisible = false
+
 
 gameOver = display.newImageRect("Images/Game Over.jpg", 1024, 769)
 gameOver.x = display.contentWidth/2 
