@@ -80,6 +80,10 @@ local function UpdateTime()
     		gameOverSoundChannel = audio.play(gameOverSound)
     		clockText.isVisible = false
     		numericField.isVisible = false
+    		if (points = 5) then 
+            YouWin.isVisible = true
+            WinSoundChannel = audio.play(WinSound)
+            end
   end   end
 end
  local function AskQuestion()
@@ -144,13 +148,17 @@ local function NumericFieldListener( event )
 			incorrectObject.isVisible = false
 			timer.performWithDelay(3020, HideCorrect)
 			points = points + 1 
+			--if points = 5 then 
+			--YouWin.isVisible = true
+            --WinSoundChannel = audio.play(WinSound)
+		    --end
 			secondsLeft = totalSeconds
 			correctSoundChannel = audio.play(correctSound)
 			--update it in the display object 
 			pointsText.text = "Numbers correct = " .. points 
 		else incorrectObject.isVisible = true 
 			secondsLeft = totalSeconds
-			correctObject.isVisible = false
+			correctObject.isVisible = false 
 			timer.performWithDelay(3020, HideIncorrect)
 		end
 	end
@@ -208,7 +216,7 @@ YouWin = display.newImageRect("Images/YouWin.png", 1024, 769)
 YouWin.x = display.contentWidth/2 
 YouWin.y = display.contentHeight/2
 YouWin.isVisible = false
-
+--WinSoundChannel = audio.play(WinSound)
 
 gameOver = display.newImageRect("Images/Game Over.jpg", 1024, 769)
 gameOver.x = display.contentWidth/2 
