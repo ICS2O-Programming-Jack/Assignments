@@ -53,18 +53,9 @@ local wrongSoundChannel
 -----------------------------------------------------------------------------------------
 --LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
-local function UpdateTime()
-
-	--decrease the number of seconds
-	secondsLeft = secondsLeft - 1
-
-	--display the number of seconds left in the clock object 
-    clockText.text = secondsLeft .. ""
-    
-    if (secondsLeft == 0) then
-    	--reset the seconds 
-    	secondsLeft = totalSeconds
-    	lives = lives - 1
+local function updateLives()
+	-- body
+	lives = lives - 1
     	if (lives == 3) then
     		heart4.isVisible = false
     		wrongSoundChannel = audio.play(wrongSound)
@@ -80,11 +71,23 @@ local function UpdateTime()
     		gameOverSoundChannel = audio.play(gameOverSound)
     		clockText.isVisible = false
     		numericField.isVisible = false
-    		if (points = 5) then 
-            YouWin.isVisible = true
-            WinSoundChannel = audio.play(WinSound)
-            end
-  end   end
+    		
+  end 
+end
+
+local function UpdateTime()
+
+	--decrease the number of seconds
+	secondsLeft = secondsLeft - 1
+
+	--display the number of seconds left in the clock object 
+    clockText.text = secondsLeft .. ""
+    
+    if (secondsLeft == 0) then
+    	--reset the seconds 
+    	secondsLeft = totalSeconds
+    	updateLives()
+  	end
 end
  local function AskQuestion()
 	-- generate 2 random nembers for division from 1 to 100
@@ -106,8 +109,10 @@ end
 	 questionObject.text = addrandomNumber1 .. " + " .. addrandomNumber2 .. " = "
     elseif (randomOperator == 2) then 
     	if (addrandomNumber1 - addrandomNumber2 < 0) then
+    		correctAnswer = addrandomNumber2 - addrandomNumber1
     		questionObject.text = addrandomNumber2 .. " - " .. addrandomNumber1 .. " = "
     	else
+    		correctAnswer = addrandomNumber1 - addrandomNumber2
 	    --create question in text Object
 	  questionObject.text = addrandomNumber1 .. " - " .. addrandomNumber2 .. " = "
 	   end
@@ -119,13 +124,11 @@ end
 	    --create question in text Object
 	     questionObject.text = devisionrandomNumber1 .. " / " .. devisionrandomNumber2 .. " = "
     correctAnswer = devisionrandomNumber1 / devisionrandomNumber2
-    correctAnswer = correctAnswer * 10
-    correctAnswer = math.round(correctAnswer)
-    correctAnswer = correctAnswer / 10 
     end
 end
 local function HideIncorrect()
 	incorrectObject.isVisible = false
+	updateLives()
 	AskQuestion()
 end
 local function HideCorrect()
@@ -148,10 +151,10 @@ local function NumericFieldListener( event )
 			incorrectObject.isVisible = false
 			timer.performWithDelay(3020, HideCorrect)
 			points = points + 1 
-			--if points = 5 then 
-			--YouWin.isVisible = true
-            --WinSoundChannel = audio.play(WinSound)
-		    --end
+			if (points == 5) then 
+			YouWin.isVisible = true
+            WinSoundChannel = audio.play(WinSound)
+		    end
 			secondsLeft = totalSeconds
 			correctSoundChannel = audio.play(correctSound)
 			--update it in the display object 
